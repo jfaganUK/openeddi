@@ -1,0 +1,11 @@
+<div class = "geoStatus">
+	<% if (rc.response.coords) { if (!rc.response.coords.status) { %> 
+		<%= rc.response.coords.latitude + ", " + rc.response.coords.longitude %> 
+	<% } else { %>
+		<%= rc.status %>
+	<% } } %>
+</div>
+<form class="form-inline">
+	<input type="text" class="geoLocationDesc" placeholder="Location description" value = "<%- rc.response.desc %>" />
+	<button class="btn geoLocationGet">Get geolocation</button>
+</form>

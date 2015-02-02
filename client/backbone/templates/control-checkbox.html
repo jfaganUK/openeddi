@@ -1,0 +1,6 @@
+			<li class = "qcontrol checkBox" <%= rc.aIndex !== undefined ? 'aindex = ' + rc.aIndex : '' %>>
+			<i class = "<%= rc.cvalue ? 'icon-check' : 'icon-check-empty' %> icon-large"></i>
+			<% if(typeof rc.cPrompt !== 'undefined') { %>
+				<%- rc.cPrompt %>
+			<% } %>
+			</li>

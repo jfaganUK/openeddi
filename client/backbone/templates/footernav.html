@@ -1,0 +1,28 @@
+<div class = "footerContent">
+	<table>
+	<tr><td>
+	<ul class = "nav nav-pills">
+		<% if (false) { %>
+			<li class = "footNavLink <%= app.appState.get('section') === 'login' ? 'active' : ''%>">
+			<a href='#login'><i class = 'icon-key'></i></a></li>
+		<% } %>
+		<% if (false) { %>
+			<li class = "footNavLink <%= app.appState.get('section') === 'login' ? 'active' : '' %>">
+			<a href='#logout'><i class = 'icon-key'></i></a></li>
+		<% } %>
+		<% if (false) { %>
+			<li class = "footNavLink <%= app.appState.get('section') === 'main' ? 'active' : '' %>">
+			<a href='#main'><i class = 'icon-home'></i></a></li>
+		<% } %>
+		<% if (false) { %>
+			<li class = "footNavLink <%= app.appState.get('section') === 'survey' ? 'active' : '' %>">
+			<a href='#survey'><i class = 'icon-pencil'></i></a></li>
+		<% } %>
+	</ul>
+	</td><td>
+		<p class = "netqueryTag"><%= app.survey ? app.survey.toJSON().title : 'NetQuery' %></p>
+		<div class = "surveyProgress-space">
+		</div>
+		<div class = "helpButton"><i class = "icon-question"></i>Help!</div>
+	</td></tr>
+</div>

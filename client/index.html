@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenEddi</title>
+
+    <!--- STYLES -->
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/font-awesome.css"/>
+    <link rel="stylesheet" href="netquery.css"/>
+    <link rel="stylesheet" href="css/bootstro.css"/>
+    <link rel="stylesheet" href="css/bootstrap-slider.min.css" />
+
+    <!-- Effeckt CSS -->
+    <link rel="stylesheet" href="css/effeckt.css"/>
+
+    <!--- JAVASCRIPT LIBRARIES -->
+    <script src="js/d3.js"></script>
+    <script src="js/d3-grid.js"></script>
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script src="js/jquery.timeago.js"></script>
+    <script src="js/bootstro.js"></script>
+    <script src="js/bootstrap-slider.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- for backbone. note that the order is important -->
+    <script src="js/underscore.js"></script>
+    <script src="js/backbone.js"></script> 
+    <script src="js/backbone.dualstorage.js"></script>
+    <script src="js/backbone.basicauth.js"></script>
+
+    <!-- Neat effects from Effeckt.CSS, although it's still new and rough -->
+    <script src="js/Effeckt.js"></script>
+
+
+    <!-- FONTS -->
+    <!-- fonts are loaded in the css file -->
+</head>
+<body>
+<div class='container' id='app-space'>
+</div>
+<div class="footer" id="appFooter">
+</div>
+
+
+<!-- TEMPLATES -->
+<script type="text/template" id="mainmenu-template">
+    <header class="jumbotron subhead">
+        <div class="container">
+            <h1>Health Care Connections Survey</h1>
+        </div>
+    </header>
+    <div id="main">
+        <div class="surveyControl">
+            <!-- button class = "btn btn-default" id = "clearStorage">Clear localStorage</button -->
+        </div>
+        <div class="warning-space">
+        </div>
+        <div class="respondent-space">
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="landing-template">
+    <p>Landing</p>
+    <button class="btn btn-default userStartSurvey">Start Survey</button>
+</script>
+
+<script type="text/template" id="intro-template">
+    <header class="jumbotron subhead">
+        <div class="container">
+            <h1><%= rc.title %></h1>
+
+            <h3><%= rc.subtitle %></h3>
+
+            <p class="bg-info"><h4>http://labcraft.uky.edu/openeddi/</h4></p>
+        </div>
+    </header>
+    <div class="">
+        <div class="surveyIntro"><%= rc.intro %></div>
+        <button class="btn btn-default acceptConsent">I Agree</button>
+    </div>
+
+</script>
+
+<script type="text/template" id="localstorage-warning-template">
+    <div class="alert alert-error lswarning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Warning!</strong> The local storage space is filling up. You are currently at <strong><%= rc.lsPerc
+        %>%</strong> of the maximum storage. Sync your data as soon as possible.
+    </div>
+</script>
+
+
+
+<script type="text/template" id="footernav-template">
+    <div class="footerContent">
+        <table>
+            <tr>
+                <td>
+                    <ul class="nav nav-pills">
+                        <% if (false) { %>
+                        <li class="footNavLink <%= app.appState.get('section') === 'login' ? 'active' : ''%>">
+                            <a href='#login'><i class='fa-key'></i></a></li>
+                        <% } %>
+                        <% if (false) { %>
+                        <li class="footNavLink <%= app.appState.get('section') === 'login' ? 'active' : '' %>">
+                            <a href='#logout'><i class='fa fa-key'></i></a></li>
+                        <% } %>
+                        <% if (false) { %>
+                        <li class="footNavLink <%= app.appState.get('section') === 'main' ? 'active' : '' %>">
+                            <a href='#main'><i class='fa fa-home'></i></a></li>
+                        <% } %>
+                        <% if (false) { %>
+                        <li class="footNavLink <%= app.appState.get('section') === 'survey' ? 'active' : '' %>">
+                            <a href='#survey'><i class='fa fa-pencil'></i></a></li>
+                        <% } %>
+                    </ul>
+                </td>
+                <td>
+                    <p class="netqueryTag"><%= app.survey ? app.survey.toJSON().title : 'OpenEddi' %></p>
+
+                    <div class="surveyProgress-space">
+                    </div>
+                    <div class="helpButton"><i class="fa fa-question"></i>Help!</div>
+                </td>
+            </tr>
+    </div>
+</script>
+
+<script type="text/template" id="outtro-template">
+    <div class="abitofcontent">
+        <p><%= rc.outtro %></p>
+        <a class="btn btn-default returnHome" href="<%= rc.outtroURL %>">Exit</a>
+
+        <div class="finalNameList"></div>
+    </div>
+</script>
+
+<script type="text/template" id="name-template">
+    <div class='nameDetail'>
+        <p class='nameDetail'><i class='fa fa-angle-right'></i>&nbsp;&nbsp;<%- rc.name %></p>
+        <a class="destroy"><i class="fa fa-remove-circle"></i></a>
+        <input class='nameedit' value="<%- rc.name %>"/>
+    </div>
+</script>
+
+<script type="text/template" id="namebasic-template">
+    <div class='nameBasic'>
+        <p><i class='fa fa-angle-right'></i>&nbsp;&nbsp;<%- rc.name %></p>
+    </div>
+</script>
+
+<script type="text/template" id="control-geolocation-template">
+    <div class="geoStatus"><% if (rc.response.coords) { if (!rc.response.coords.status) { %>
+        <%= rc.response.coords.latitude + ", " + rc.response.coords.longitude %>
+        <% } else { %>
+        <%= rc.status %>
+        <% } } %>
+    </div>
+    <form class="form-inline">
+        <input type="text" class="geoLocationDesc" placeholder="Location description" value="<%- rc.response.desc %>"/>
+        <button class="btn btn-default geoLocationGet">Get geolocation</button>
+    </form>
+</script>
+
+<script type="text/template" id="nametoggle-template">
+    <div class="row-fluid">
+        <!-- button class = "btn btn-default nametoggler <%= rc.isActive ? 'active' : '' %>" data-toggle="button"><%- rc.name %></button -->
+        <label class="checkbox nametoggler"><input type="checkbox" <%= rc.isActive ? 'checked' : '' %> inlist = <%=
+            rc.isActive ? '"true"' : '"false"' %>/><%- rc.name %></label>
+    </div>
+</script>
+
+<script type="text/template" id="respondent-main-template">
+    <p><%- rc.timeago %> - <%- rc.surveystatus %> - <%- rc.lastgroup %> </p>
+    <p>Started by <%- rc.user %> at <%- rc.datecreated %>
+    <p><% if (rc.names.local) { %>
+        Names are local
+        <%= rc.names.dirty ? ', and dirty' : '' %>
+        <%= rc.names.destroyed ? ', and destroyed' : '' %>
+        <% } %></p>
+
+    <p><% if (rc.responses.local) { %>
+        Responses are local
+        <%= rc.responses.dirty ? ', and dirty' : '' %>
+        <%= rc.responses.destroyed ? ', and destroyed' : '' %>
+        <% } %></p>
+
+    <button class="btn btn-default loadRespondentSurvey" data-loading-text="Loading survey...">Load Survey</button>
+    <div class="progress syncResponseProgress">
+        <div class="bar"></div>
+    </div>
+    <div class="progress syncNameProgress">
+        <div class="bar"></div>
+    </div>
+    <% if (rc.sync && app.appState.get('hostreachable')) { %>
+    <button class="btn btn-default respondentSync">Sync now</button><% } %>
+    <!-- button class = "btn btn-default viewLocal">View Local Data</button -->
+</script>
+
+<script type="text/template" id="qprompt-modal-template">
+    <div id="qprompt-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="qPromptLabel"><%= rc.promptTitle %></h3>
+                </div>
+                <div class="modal-body">
+                    <%= rc.promptContent %>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="nameinterpret-template">
+    <div class="row-fluid">
+        <div class='nameinterpretTitle'><%= rc.prompt %></div>
+        <% if (rc.niType === "radio") { %>
+        <div class="btn-group niRadio" data-toggle="buttons-radio">
+            <% _.each(rc.radioList,function(x) {
+            if (rc.details[rc.namelist] !== undefined) {
+            if( rc.details[rc.namelist] == x.value) {
+            x.active = 'active';
+            } else {
+            x.active = '';
+            }
+            } else {
+            x.active = '';
+            }
+            %>
+            <button type="button" class="btn btn-default niRadioBtn <%- x.active %>" value="<%- x.value %>">
+                <%= x.desc === "" ? x.value : x.desc %>
+            </button>
+            <% }); %>
+        </div>
+
+        <% } %>
+        <% if (rc.niType === 'checkbox') { %>
+        <div class="nameinterpretCheckboxSpace">
+        </div>
+        <div class="otherControlSpace">
+        </div>
+        <% } %>
+        <% if (rc.niType === 'slider') { %>
+        <div class="nameinterpretSliderSpace">
+        </div>
+        <% } %>
+
+        <% if (rc.niType === 'longtext') { %>
+        <div class="nameinterpretLongtextSpace">
+            <textarea rows="3" class="longText form-control" placeholder="Response Here"><%- rc.details[rc.qn]
+                %></textarea>
+        </div>
+        <% } %>
+    </div>
+</script>
+
+<script type="text/template" id="question-template">
+
+    <% if (typeof rc.dkrf !== 'undefined') { if(rc.dkrf) { %>
+    <div class="refusedDKSpace">
+        <div class="DKcontrol">
+            <i class="fa fa-question-sign"></i>
+        </div>
+        <div class="RFcontrol">
+            <i class="fa fa-thumbs-down-alt"></i>
+        </div>
+    </div>
+    <% } } %>
+
+    <p class="questiontitle">Question <%- rc.qid %> - <%- rc.questionTitle %></p>
+
+    <p class="questionprompt"><%= rc.questionPrompt %> </p>
+    <div class="touchQuestionPrompt"><%= rc.questionPrompt %></div>
+
+    <div class="questionControlSpace">
+    </div>
+
+    <div class="otherControlSpace">
+    </div>
+
+
+</script>
+
+<script type="text/template" id="control-checkbox-template">
+
+    <div class="container qcontrol checkBox" <%= rc.aIndex !== undefined ? 'aindex = ' + rc.aIndex : '' %>>
+    <div class="checkbox"><label>
+        <input type="checkbox" class="effeckt-ckbox-ios7">
+        <% if(typeof rc.cPrompt !== 'undefined') { %>
+        <%= rc.cPrompt %>
+        <% } %>
+        </input>
+    </label></div>
+    </div>
+</script>
+
+<script type="text/template" id="control-otherinput-template">
+    <li class="qcontrol otherControl">
+        <!-- i class = "<%= rc.oCheck ? 'fa fa-check' : 'fa fa-check-empty' %> fa fa-large otherCheck"></i --><p>
+        Other: </p>
+        <input type="text" class="form-control qcontrol <%= rc.oCheck ? '' : 'disabled' %> otherInput"
+               placeholder="Other" value="<%- rc.oText %>"/>
+    </li>
+</script>
+
+<script type="text/template" id="control-namevaluecompare-template">
+    <!-- Compare need help and get help -->
+    <div class = "row">
+        <div class="col-md-4">
+        </div>
+    </div>
+
+</script>
+
+<script type="text/template" id="control-namegen-template">
+            <div>
+                <form class = "form-horizontal namegen">
+                    <div class = "control-group">
+                        <label class = "control-label niRadio">Person&#39;s Name</label>
+                        <div class = "controls">
+                            <input type = "text" class = "qcontrol inputName form-control" id = "<%= "nameinput-"+rc.questionTitle %>" placeholder = "Name" value = ""/>
+                        </div>
+                        <br />
+                        <div class = "well well-small">
+                            <p>There <span class = " namegenCount">are no names</span> in this list.</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <p class = 'namelisttitle'>Added names<p>
+                <div class = "namelist" id = "<%= "namelist-"+rc.questionTitle %>">
+                </div>
+            </div>
+</script>
+
+<script type="text/template" id="control-affiliation-dropadd-template">
+    <div class="aff-dropadd-controls">
+        <div class="aff-dropadd-header row">
+            <div class="col-md-4"><h5><%= rc.modenames.mode1.head %></h5>
+
+                <p><%= rc.modenames.mode1.verb %></p></div>
+            <div class="col-md-4"><h5><%= rc.modenames.mode2.head %></h5>
+
+                <p><%= rc.modenames.mode2.verb %></p></div>
+
+        </div>
+        <div class="row">
+            <div class="mode1-select col-md-4"></div>
+            <div class="mode2-select col-md-4"></div>
+            <div class="col-md-3 aff-dropadd-submitclear">
+                <h5>Click Add After Choosing</h5>
+                <button class="btn btn-primary addAffiliation">Add</button>
+                <button class="btn btn-inverse clearAffiliation">Clear</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="afilliation-list-space">
+    </div>
+</script>
+
+
+<script type="text/template" id="control-affiliation-dropadd-select-template-TEMPREMOVE">
+    <select class="aff-dropadd" mode="<%= rc.mode %>">
+        <% if (rc.names.length) { %>
+        <option value="NONE" nid="" selected="selected">Please select...</option>
+
+        <% for (var i = 0; i < rc.names.length; i++) { %>
+        <option value="<%= rc.names[i] %>" nid="<%= rc.ids[i] %>"><%= rc.names[i] %></option>
+        <% } } %>
+        <option value="ADDNEW" nid=""
+        <% if ( !rc.names.length ) { %> selected = "selected" <% } %>>Add a new <%= rc.modename %>...</option>
+    </select>
+
+</script>
+
+<script type="text/template" id="control-affiliation-dropadd-select-template">
+    <ul class="aff-dropadd-list" mode="<%= rc.mode %>">
+        <li value="ADDNEW" nid=""
+        <% if ( !rc.names.length ) { %> selected = "selected" <% } %>>
+        <p>Add a new <%= rc.modename %>...</p>
+        <input class="mode-name-input input-block-level form-control <%= rc.mode %>-addnew" type="text"
+               placeholder="Add new <%= rc.modename %>"/>
+        </li>
+        <% if (rc.names.length) { %>
+        <% for (var i = 0; i < rc.names.length; i++) { %>
+        <li value="<%= rc.names[i] %>" nid="<%= rc.ids[i] %>"><p><%= rc.names[i] %></p></li>
+        <% } } %>
+
+    </ul>
+
+</script>
+
+<script type="text/template" id="control-affiliation-dropadd-pair">
+    <span class="remove-pair" data-original-title="Remove this tie" data-toggle="tooltip"><i
+            class="fa fa-remove"></i></span>
+    <span class="mode-name" mode="mode1" data-original-title="Edit this name" data-toggle="tooltip"><%= rc.mode1.name %>&nbsp;&nbsp;<i
+            class="fa fa-pencil"></i></span>
+    <input class="nameedit" mode="mode1" value="<%= rc.mode1.name %>"/>
+    <span class="mode-connect"><i class="fa fa-long-arrow-right"></i></span>
+    <span class="mode-name" mode="mode2" data-original-title="Edit this name" data-toggle="tooltip"><%= rc.mode2.name %>&nbsp;&nbsp;<i
+            class="fa fa-pencil"></i></span>
+    <input class="nameedit" mode="mode2" value="<%= rc.mode2.name %>"/>
+</script>
+
+<script type="text/template" id="control-nameinterpret-template">
+    <div class="container-fluid nameinterpretspace">
+    </div>
+</script>
+
+<script type="text/template" id="basicroster-template">
+    <div class="basicRosterTable">
+        <table class="table">
+            <% _.each(rc.namelistPrompts,function(x) { %>
+            <tr>
+                <td><i class="<%= x.icon %>"></i></td>
+                <td><%= x.prompt %></td>
+            </tr>
+            <% }) %>
+        </table>
+    </div>
+    <div class="progress basicRosterProgress">
+        Loading roster...
+        <div class="bar"></div>
+    </div>
+    <div class="accordion basicRosterSpace" id="<%= rc.id %>">
+    </div>
+</script>
+
+<script type="text/template" id="basicroster-entry-small-template">
+    <h4 class='rosterEntryName'><i class="fa fa-chevron-right"></i><%= rc.name %></h4>
+    <p class="rosterSentence"></p>
+    <div class="btn-group basicRosterEntryButtons" data-toggle="buttons-checkbox">
+        <% _.each(rc.namelistPrompts,function(x) {
+        if( x.inlist) {
+        x.active = 'active';
+        } else {
+        x.active = '';
+        }
+        %>
+        <button type="button" class="qcontrol btn btn-default RadioBtn basicRosterEntryButton <%- x.active %>"
+                value="<%- x.nameList %>" guttman="<%- x.guttman %>"
+                data-original-title="<%= x.prompt %>" data-toggle="tooltip">
+            <i class="<%= x.icon %>"></i></button>
+        <% }); %>
+    </div>
+</script>
+
+<script type="text/template" id="basicroster-entry-template">
+    <h4 class='rosterEntryName'><i class="fa fa-chevron-right"></i><%= rc.name %></h4>
+    <p class="rosterSentence"></p>
+    <div class="basicRosterRadioTable">
+        <table class="table">
+            <% _.each(rc.namelistPrompts,function(x) {
+            if( x.inlist) {
+            x.active = 'active';
+            } else {
+            x.active = '';
+            }
+            %>
+            <tr>
+                <td>
+                    <div class="btn-group basicRosterEntryButtons" data-toggle="buttons-checkbox">
+                        <button type="button"
+                                class="qcontrol btn btn-default RadioBtn basicRosterEntryButton <%- x.active %>"
+                                value="<%- x.nameList %>" guttman="<%- x.guttman %>">
+                            <i class="<%= x.icon %>"></i></button>
+                </td>
+    </div>
+    <td class="tdRosterPrompt" value="<%- x.nameList %>"><%= x.prompt %></td>
+    </tr>
+    <% }) %>
+    </table>
+    </div>
+</script>
+
+<script type="text/template" id="basicroster-entry-accordion-template">
+    <div class="accordion-heading">
+        <h4 class="accordion-toggle rosterEntryName" data-toggle="collapse" data-parent="#<%= rc.rosterid %>"
+            href="#<%= rc.id %>">
+            <i class="fa fa-chevron-right"></i><%= rc.name %> - <span class="accordionClickRoster">click here</span>
+        </h4>
+    </div>
+    <div class="rosterSentence"></div>
+    <div id="<%= rc.id %>" class="accordion-body collapse">
+        <div class="accordion-inner">
+
+            <div class="basicRosterRadioTable">
+                <table class="table">
+                    <% _.each(rc.namelistPrompts,function(x) {
+                    if( x.inlist) {
+                    x.active = 'active';
+                    } else {
+                    x.active = '';
+                    }
+                    %>
+                    <tr>
+                        <td>
+                            <div class="btn-group basicRosterEntryButtons" data-toggle="buttons-checkbox">
+                                <button type="button"
+                                        class="qcontrol btn btn-default RadioBtn basicRosterEntryButton <%- x.active %>"
+                                        value="<%- x.nameList %>" guttman="<%- x.guttman %>">
+                                    <i class="<%= x.icon %>"></i></button>
+                        </td>
+            </div>
+            <td class="tdRosterPrompt" value="<%- x.nameList %>"><%= x.prompt %></td>
+            </tr>
+            <% }) %>
+            </table>
+        </div>
+    </div>
+    </div>
+</script>
+
+
+<script type="text/template" id="control-shortanswer-template">
+    <% if (rc.cPrompt) { %>
+    <%= rc.cPrompt %>
+    <input type="text" class="shortAnswer" placeholder="" aindex="<%= rc.aIndex %>"
+           value="<%- rc.cvalue %>"/>
+    <% } else { %>
+    <input type="text" class="shortAnswer" placeholder="Response Here" value="<%- rc.cvalue %>"/>
+    <% } %>
+</script>
+
+<script type="text/template" id="control-slider-template">
+    <% if (rc.cPrompt) { %>
+        <h4><%= rc.cPrompt %></h4>
+            <div class = "row">
+                <div class = "col-md-2"><%= rc.sliderSetup.min.desc %></div>
+                <div class = "col-md-4"><input type="text" class="controlSlider" placeholder="" aindex="<%= rc.aIndex %>"
+                    data-slider-min = "<%- rc.sliderSetup.min.value %>" data-slider-max = "<%- rc.sliderSetup.max.value %>" data-slider-step = "<%- rc.sliderSetup.step %>"
+                    data-slider-value="<%- rc.cvalue %>"/></div>
+                <div class = "col-md-2"><%= rc.sliderSetup.max.desc %></div>
+            </div>
+            <hr/>
+    <% } else { %>
+    <%= rc.sliderSetup.min.desc %> <input type="text" class="controlSlider" placeholder=""
+        data-slider-min = "<%- rc.sliderSetup.min.value %>" data-slider-max = "<%- rc.sliderSetup.max.value %>" data-slider-step = "<%- rc.sliderSetup.step %>"
+        data-slider-value="<%- rc.cvalue %>"/> <%= rc.sliderSetup.max.desc %>
+    <% } %>
+</script>
+
+<script type="text/template" id="control-sliderfeedback-template">
+    <h3>Are your needs being met?</h3>
+    <div class = "sliderFeedbackSpace"></div>
+</script>
+
+<script type="text/template" id="control-longtext-template">
+    <% if (rc.cPrompt) { %>
+    <%= rc.cPrompt %>
+    <textarea rows="3" class="longText form-control" placeholder="<%= rc.cPrompt %>" aindex="<%= rc.aIndex %>"><%-
+        rc.cvalue %></textarea>
+    <% } else { %>
+    <textarea rows="3" class="longText form-control" placeholder="Response Here"><%- rc.cvalue %></textarea>
+    <% } %>
+</script>
+
+<script type="text/template" id="control-dropdown-template">
+    <% if(rc.cPrompt !== undefined) { %>
+    <p class='controlPrompt'><%= rc.cPrompt %></p>  
+    <% } %>
+    <select class="form-control dropDownControl">
+        <% _.each(rc.radioList,function(x) {
+        if (rc.cvalue !== undefined) {
+        // Note: using == instead of === since I things get coerced to strings occasionally
+        if( rc.cvalue == x.value) {
+        x.active = 'selected';
+        } else {
+        x.active = '';
+        }
+        } else {
+        x.active = '';
+        }
+        %>
+        <option value="<%- x.value %>"
+        <%- x.active %> >
+        <%= x.desc === "" ? x.value : x.desc %> </option>
+        <% }); %>
+    </select>
+</script>
+
+<script type="text/template" id="control-touchnameinterpret-template">
+    <!-- div class = "row forceControls">
+        <div class = "col-md-3"><p>Alpha K <input type="text" class="col-md-2 alphaSlider" value=""></input></p></div>
+        <div class = "col-md-3"><p>Charge <input type="text" class="col-md-2 chargeSlider" value=""></input></p></div>
+        <div class = "col-md-3"><p>Friction <input type="text" class="col-md-2 frictionSlider" value=""></input></p></div>
+        <div class = "col-md-3"><p>Coll. Alpha <input type="text" class="col-md-2 collAlphaSlider" value=""></input></p></div>
+    </div -->
+    <div class="modalSVG">
+    </div>
+    <div class="svgSpace">
+    </div>
+    <div class="touchQuestionPrompt"></div>
+</script>
+
+<script type="text/template" id="control-namepilesort-template">
+    <div class="cardTrash">
+        <i class="fa fa-trash fa fa-large"></i>
+    </div>
+    <div class="touchQuestionPrompt"></div>
+    <div class="modalSVG">
+    </div>
+    <div id="nameScrollerWrapper">
+        <div id="nameScroller">
+            <ul id="nameListScroll">
+            </ul>
+        </div>
+        <div>
+</script>
+
+<script type="text/template" id="control-namenodelink-template">
+    <div class="modalSVG">
+    </div>
+    <div class="svgSpace">
+    </div>
+    <div class="forceControls">
+        <div class="row">
+            <div class="col-md-3"><p>Alpha K <input type="text" class="col-md-2 alphaSlider" value=""></p></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><p>Link Distance <input type="text" class="col-md-2 linkDistance" value="">
+            </p></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><p>Charge <input type="text" class="col-md-2 chargeSlider" value=""></p></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><p>Gravity <input type="text" class="col-md-2 gravitySlider" value=""></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><p>Friction <input type="text" class="col-md-2 frictionSlider" value=""></p>
+            </div>
+        </div>
+    </div>
+    <div id='nlToolBox' class='btn-toolbar'>
+        <div class='btn-group' data-toggle="buttons">
+            <label class="btn btn-default" value="toolMove">
+                <input type="radio" class="btn btn-default" class-toggle="btn-info" value="toolMove">
+                <i class="fa fa-arrows fa-large"></i> Move
+            </label>
+            <label class="btn btn-default" value="toolRemove">
+                <input type="radio" class="btn btn-default" class-toggle="btn-info" value="toolRemove">
+                <i class="fa fa-trash-o fa-large"></i> Remove
+            </label>
+            <label class="btn btn-default" value="toolAddLink">
+                <input type="radio" class="btn btn-default" class-toggle="btn-info" value="toolAddLink">
+                <i class="fa fa-compress fa-large"></i> Add Link
+            </label>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="control-bullseye-template">
+    <div class="modalSVG">
+    </div>
+    <div class="svgSpace">
+    </div>
+    <div class="touchQuestionPrompt"></div>
+</script>
+
+<script type="text/template" id="namecard-scroll-template">
+    <li class="namecardListItem" nmid="<%= rc.nmid %>">
+        <%= rc.name %>
+        <br/>
+
+        <p>Add card</p>
+    </li>
+</script>
+
+<script type="text/template" id="control-namepick-template">
+    <div class="container-fluid nametogglespace">
+    </div>
+</script>
+
+
+<script type="text/template" id="control-boilerplate-template">
+    <!-- Boilerplate, no real controls here -->
+</script>
+
+<script type="text/template" id="control-yesno-template">
+    <% if(rc.cPrompt !== undefined) { %>
+    <p class='controlPrompt'><%- rc.cPrompt %></p>
+    <% } %>
+    <div class="btn-group yesnoBtnGroup" data-toggle="buttons">
+        <label class="btn btn-default yesnoBtn <%= rc.cvalue === 'yes' ? 'active' : '' %>" <%= rc.aIndex !== undefined ?
+        'aindex = ' + rc.aIndex : '' %> value = "yes">
+        <input type="radio" name="yesBtn">Yes</input>
+        </label>
+        <label class="btn btn-default yesnoBtn <%= rc.cvalue === 'no' ? 'active' : '' %>" <%= rc.aIndex !== undefined ?
+        'aindex = ' + rc.aIndex : '' %> value = "no">
+        <input type="radio" name="noBtn">No</input>
+        </label>
+    </div>
+</script>
+
+<script type="text/template" id="control-radio-template">
+    <% if(rc.cPrompt !== undefined) { %>
+    <p class='controlPrompt'><%= rc.cPrompt %></p>
+    <% } %>
+    <div class="btn-group btnRadioGroup" data-toggle="buttons-radio">
+        <% _.each(rc.radioList,function(x) {
+        if (rc.cvalue !== undefined) {
+        // Note: using == instead of === since I things get coerced to strings occasionally
+        if( rc.cvalue == x.value) {
+        x.active = 'active';
+        } else {
+        x.active = '';
+        }
+        } else {
+        x.active = '';
+        }
+        %>
+        <button type="button" class="qcontrol btn RadioBtn <%- x.active %>" value="<%- x.value %>"
+        <%= rc.aIndex !== undefined ? 'aindex = ' + rc.aIndex : '' %> >
+        <%= x.desc === "" ? x.value : x.desc %> </button>
+        <% }); %>
+    </div>
+</script>
+
+<script type="text/template" id="group-template">
+    <span class="bigPrevArrow"><i class="fa fa-arrow-left"></i></span>
+    <span class="bigNextArrow"><i class="fa fa-arrow-right"></i></span>
+    <span class="bigNextText">Next</span>
+
+    <h3 class="groupTitle"><%= rc.title %></h3>
+
+    <div class="questionSpace">
+    </div>
+
+</script>
+
+<script type="text/template" id="login-template">
+    <h3>Login</h3>
+    <form class="form-inline">
+        <input type="text" class="input-small inputUsername" placeholder="Username">
+        <input type="password" class="input-small inputPassword" placeholder="Password">
+        <button type="submit" class="btn loginAttempt">Sign in</button>
+        <button type="submit" class="btn cancelLogin">Cancel</button>
+    </form>
+</script>
+
+
+<!-- load the survey logic -->
+<script src="./survey.js"></script>
+<script src="./netquery.js"></script>
+
+<!-- Models -->
+<script src="./backbone/models/appstate.js"></script>
+<script src="./backbone/models/name.js"></script>
+<script src="./backbone/models/question.js"></script>
+<script src="./backbone/models/respondent.js"></script>
+<script src="./backbone/models/survey.js"></script>
+<script src="./backbone/models/group.js"></script>
+<script src="./backbone/models/error.js"></script>
+
+<!-- Views -->
+<script src="./backbone/views/app.js"></script>
+<script src="./backbone/views/main.js"></script>
+<script src="./backbone/views/question.js"></script>
+<script src="./backbone/views/name.js"></script>
+<script src="./backbone/views/group.js"></script>
+<script src="./backbone/views/respondent.js"></script>
+<script src="./backbone/views/login.js"></script>
+<script src="./backbone/views/outtro.js"></script>
+<script src="./backbone/views/landing.js"></script>
+<script src="./backbone/views/intro.js"></script>
+<script src="./backbone/views/error.js"></script>
+
+<!-- Question Types -->
+<script src="./backbone/views/questionviews/touchnameinterpret.js"></script>
+<script src="./backbone/views/questionviews/namepilesort.js"></script>
+<script src="./backbone/views/questionviews/namenodelink.js"></script>
+<script src="./backbone/views/questionviews/geolocation.js"></script>
+<script src="./backbone/views/questionviews/shortanswer.js"></script>
+<script src="./backbone/views/questionviews/basicroster.js"></script>
+<script src="./backbone/views/questionviews/basicrosterentry.js"></script>
+<script src="./backbone/views/questionviews/affiliationdropadd.js"></script>
+<script src="./backbone/views/questionviews/longtext.js"></script>
+<script src="./backbone/views/questionviews/namesampler.js"></script>
+<script src="./backbone/views/questionviews/bullseye.js"></script>
+<script src="./backbone/views/questionviews/slider.js"></script>
+<script src="./backbone/views/questionviews/sliderfeedback.js"></script>
+
+<!-- Collections -->
+<script src="./backbone/collections/names.js"></script>
+<script src="./backbone/collections/questions.js"></script>
+<script src="./backbone/collections/respondents.js"></script>
+<script src="./backbone/collections/groups.js"></script>
+
+<!-- Collections -->
+<script src="./backbone/routers/router.js"></script>
+
+<!-- This kicks everything off -->
+<script src="./backbone/app.js"></script>
+</body>
+</html>

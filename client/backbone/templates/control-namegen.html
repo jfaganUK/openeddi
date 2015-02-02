@@ -1,0 +1,19 @@
+			<div>
+				<form class = "form-horizontal namegen">
+					<div class = "control-group">
+						<label class = "control-label niRadio">Person's Name</label>
+						<div class = "controls">
+							<input type = "text" class = "qcontrol inputName" id = "<%= "nameinput-"+rc.questionTitle %>" placeholder = "Name" value = ""/>
+						</div>
+						<br />
+						<div class = "well well-small">
+							<p>There <span class = " namegenCount">are no names</span> in this list.</p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div>
+				<p class = 'namelisttitle'>Added names<p>
+				<div class = "namelist" id = "<%= "namelist-"+rc.questionTitle %>">
+				</div>
+			</div>

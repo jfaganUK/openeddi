@@ -1,0 +1,9 @@
+			<select class = "aff-dropadd" mode = "<%= rc.mode %>">
+				<% if (rc.names.length) {  %>
+					<option value = "NONE" nid = "" selected="selected">Please select...</option>
+					
+					<% for (var i = 0; i < rc.names.length; i++) { %>
+					<option value = "<%= rc.names[i] %>" nid = "<%= rc.ids[i] %>"><%= rc.names[i] %></option>
+				<% } } %> 
+					<option value = "ADDNEW" nid = "" <% if ( !rc.names.length ) { %> selected = "selected" <% } %>>Add a new <%= rc.modename %>...</option>
+			</select>

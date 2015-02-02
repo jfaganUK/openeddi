@@ -1,0 +1,23 @@
+
+			<% if (typeof rc.dkrf !== 'undefined') { if(rc.dkrf) { %>
+			<div class = "refusedDKSpace">
+				<div class = "DKcontrol">
+					<i class = "icon-question-sign"></i>
+				</div>
+				<div class = "RFcontrol">
+					<i class = "icon-thumbs-down-alt"></i>
+				</div>
+			</div>
+			<% } } %>
+		
+			<p class = "questiontitle">Question <%- rc.qid %> - <%- rc.questionTitle %></p>
+			
+			<p class = "questionprompt"><%= rc.questionPrompt  %> </p>
+			<div class = "touchQuestionPrompt"><%= rc.questionPrompt %></div>
+			
+			<div class = "questionControlSpace">
+			</div>
+			
+			<div class = "otherControlSpace">
+			</div>
+			

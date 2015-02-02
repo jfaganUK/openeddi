@@ -1,0 +1,15 @@
+{
+  "name": "OpenEddi",
+  "version": "0.0.1",
+  "description": "A data collection platform.",
+  "dependencies": {
+    "express"         : "*",
+    "path"            : "*",
+    "sequelize"       : "*",
+    "restify"         : "*",
+    "pg"              : "*",
+    "lodash"          : "*",
+    "lodash-express"  : "*"
+  }
+}
+

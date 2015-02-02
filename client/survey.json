@@ -1,0 +1,51 @@
+{
+  "survey":
+  {
+    "sid": 2,
+    "title": "OpenEddi",
+    "subtitle": "A new generation of data collection and interaction.",
+    "intro": "Introduction goes here.",
+    "outtro": "The exit message goes here."
+    "groupOrder": [1,2,3]
+  },
+  "groups" :
+  [
+    {"gid" : 1, "title" : "Group 1", "description" : "describe the group"},
+    {"gid" : 2, "title" : "Group 2", "description" : "describe the group"},
+    {"gid" : 3, "title" : "Group 3", "description" : "describe the group"},
+  ],
+  "questions" :
+  [
+    {
+      "qid": 101,
+      "gid": 1,
+      "sid": 3,
+      "sortIndex": 0,
+      "questionTitle": "aGoodName",
+      "questionType": "shorttext",
+      "questionPrompt": "Just a short text entry"
+    },
+    {
+      "qid": 102,
+      "gid": 2,
+      "sid": 3,
+      "sortIndex": 0,
+      "questionTitle": "aBadName",
+      "questionType": "shorttext",
+      "questionPrompt": "Just a short text entry"
+    },
+    {
+      "qid": 103,
+      "gid": 3,
+      "sid": 3,
+      "sortIndex": 0,
+      "questionTitle": "aOkayName",
+      "questionType": "shorttext",
+      "questionPrompt": "Just a short text entry"
+    }
+
+  ]
+}
+
+
+

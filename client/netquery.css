@@ -1,0 +1,792 @@
+
+@font-face {
+  font-family: 'Droid Sans';
+  src: url('../font/Droid_Sans/DroidSans.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Arvo';
+  src: url('../font/Arvo/Arvo-Regular.ttf') format('truetype');
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Arvo', serif;
+}
+
+body {
+	font-family: 'Droid Sans', sans-serif;
+	z-index: 1;
+	background-image: url('./img/p5.png');
+}
+
+.effeckt-caption figcaption {
+	background-color: rgba(0, 0, 0, 0.8);
+	color: rgb(255, 255, 255);
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.element {
+  .center-block();
+}
+
+#app-space {
+	overflow: auto;
+	padding-bottom: 150px;
+	border-radius: 4px;
+	background: #FFF;
+	padding-left: 10px;
+}
+
+#contents {
+	background: #FFF;
+	padding: 5px;
+	-webkit-border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.abitofcontent {
+	padding-top: 100px;
+}
+
+.longText {
+	width: 75%;
+}
+
+.emphasis {
+	border-radius: 3px;
+	border-color: #3a87ad;
+	background: #3a87ad;
+	color: white;
+	padding: 5px;
+}
+
+.otherInput {
+	max-width: 300px;
+}
+
+.surveyIntro {
+	overflow: hidden;
+}
+
+.controlSlider {
+	width: 340px;
+}
+
+/******************
+Respondent cells
+******************/
+
+.respondent-space {
+	padding-top: 30px;
+}
+
+.main-respondent {
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	margin: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	padding-right: 10px;
+	vertical-align: middle;
+}
+
+.main-respondent:hover {
+}
+
+.syncResponseProgress {
+	display: none;
+	margin-top: 10px;
+}
+
+.syncNameProgress {
+	display: none;
+	margin-top: 10px;
+}
+
+/******************
+Footer nav
+******************/
+
+.footer {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+	z-index: 1000;
+}
+
+.netqueryTag {
+	font-family: 'Arvo', serif;
+	display: inline;
+	pointer-events: none;
+}
+
+.surveyProgress-space .progress {
+	background-image: linear-gradient(to bottom,#9B9B9B,#B3B3B3);
+}
+
+.helpButton {
+	display: none;
+}
+
+
+/******************
+Group
+******************/
+
+.questiongroup {
+	padding-top: 100px;
+	padding-bottom: 400px; 
+}
+
+.navBarContainer {
+	position: fixed;
+	top: 5px;
+	left: 0px;
+	width: 100%;
+	z-index: 950;
+	height: 52px;
+}
+
+.navBarGroupText {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+.groupNavBar {
+	background: #FFF;
+	width: 95%;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	margin: 0 auto;
+	position: relative;
+	border-radius: 4px;
+	border: #999;
+	border-width: 1px;
+}
+
+.groupNavBar.bottomNavBar {
+	bottom: 0px;
+	left: 0px;
+	-webkit-box-shadow: 0px -10px 10px rgba(25, 25, 25, 0.1);
+	-moz-box-shadow:    0px -10px 10px rgba(25, 25, 25, 0.1);
+	box-shadow:         0px -10px 10px rgba(25, 25, 25, 0.1);
+}
+
+.groupNavBar.topNavBar {
+	top: 0px;
+	left: 0px;
+	-webkit-box-shadow: 0px 10px 10px rgba(25, 25, 25, 0.1);
+	-moz-box-shadow:    0px 10px 10px rgba(25, 25, 25, 0.1);
+	box-shadow:         0px 10px 10px rgba(25, 25, 25, 0.1);
+}
+
+.groupNavBar i {
+	color: #838383;
+}
+
+.groupNavBar .prevGroupBtn {
+	position: absolute;
+	left: 25px;
+	top: 10px;
+}
+
+.groupNavBar .nextGroupBtn {
+	position: absolute;
+	right: 25px;
+	top: 10px;
+}
+
+.bigPrevArrow {
+	position: fixed;
+	left: 5px;
+	top: 5px;
+	font-size: 50px;
+	z-index: 1000;
+}
+
+.bigNextArrow {
+	position: fixed;
+	right: 5px;
+	top: 5px;
+	font-size: 50px;
+	z-index: 1000;
+}
+
+.bigNextText {
+	position: fixed;
+	right: 5px;
+	top: 58px;
+	font-size: 27px;
+	z-index: 1000;
+}
+
+.groupTitle {
+	color: rgb(10,10,10); 
+	text-shadow: black 0.1em 0.1em 0.2em;
+	z-index: 1000;
+	position: fixed;
+	top: 0px;
+	left: 60px;
+}
+
+/******************
+Question
+******************/
+
+li.qcontrol {
+	list-style-type: none;
+}
+
+li.qcontrol:hover {
+	cursor: pointer; cursor: hand;
+}
+
+li.qcontrol.disabled {
+	color: #b3b3b3;
+}
+
+.qcontrol p {
+	display: inline;
+}
+
+
+
+.question {
+	background: #EEE;
+	padding: 5px;
+	-webkit-border-radius: 4px;
+	margin-bottom: 5px;
+}
+
+.question .questiontitle {
+	border-top: 1px solid #cccccc;
+	font-size: 8px;
+	color: #999;
+}
+
+.question .questiontitle {
+	border-top: 1px solid #cccccc;
+}
+
+.question .questionprompt {
+}
+
+.controlPrompt {
+	margin-top: 15px;
+	margin-bottom: 5px;
+}
+
+.controlPrompt p {
+	display: inline;
+}
+
+/******************
+Refused and Don't Know
+******************/
+
+.refusedDKSpace {
+	position: relative;
+}
+
+.refusedDKSpace p {
+	display: inline;
+}
+
+.DKcontrol {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	color: #CCC;
+}
+
+.RFcontrol {
+	position: absolute;
+	right: 20px;
+	top: 0px;
+	color: #CCC;
+}
+
+.DKcontrol.enabled {
+	color: #A44;
+}
+
+.RFcontrol.enabled {
+	color: #A44;
+}
+
+.DKcontrol:hover {
+	cursor: pointer; cursor: hand;
+	color: #333;
+}
+
+.RFcontrol:hover {
+	cursor: pointer; cursor: hand;
+	color: #333;
+}
+
+
+.inputName {
+	max-width: 400px;
+}
+
+.fa-ul.presentation-list li:hover {
+	color: rgb(91, 91, 167);
+	cursor: pointer;
+}
+.presentation-list {
+	line-height: 40px;
+	font-size: 18px;
+	position: relative;
+	left: 22px;
+}
+
+/******************
+Name Picker
+******************/
+
+.nametoggle.row {
+	margin-top: 5px;
+}
+
+.btn.nametoggler {
+	width: 50%;
+}
+
+
+/******************
+Touch Name Interpret
+******************/
+
+/* background from subtle patterns.com */
+
+svg .circ {
+	fill: #FFF;
+	stroke: #AAA;
+	stroke-width: 3px;
+}
+
+.alphaSlider {
+	width: 400px;
+}
+
+svg g.ns  {
+	z-index: 2000;
+}
+
+.rsText {
+	font-weight: bold;
+	pointer-events: none;
+}
+
+.niSVG {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 990;
+}
+
+
+/******************
+Name List 
+******************/
+
+.namelist {
+	list-style: none;
+}
+
+.namelist .namelisttitle {
+	text-indent: 15px;
+	font-style: italic;
+}
+
+.namelist li {
+	/*padding: 0px 0px 0px 20px;*/
+	border-bottom: 1px solid #cccccc;
+}
+
+.namelist li:last-child {
+	border-bottom: none;
+}
+
+.namelist li p {
+	margin: 0px;
+}
+
+.namelist li:hover {
+	background: #CCC;
+	cursor: pointer; cursor: hand;
+}
+
+div .nameDetail {
+	position: relative;
+}
+
+.namelist .destroy {
+	position: absolute;
+	color: #AAA;
+	right: 5px;
+	top: 0px;
+	display: none;
+}
+
+.namelist li:hover .destroy {
+	display: block;
+}
+
+.namelist .destroy:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+
+.namelist .nameedit {
+	display: none;
+}
+
+.namelist li.editing .nameedit {
+	display: block;
+}
+
+.namelist li.editing p {
+	display: none;
+}
+
+/******************
+
+Name Interpret
+
+******************/
+
+.nameinterpret button {
+	min-height: 40px;
+	min-width: 40px;
+}
+
+.nameinterpretTitle {
+	font-weight: bold;
+}
+
+.nameinterpretspace .nameinterpret {
+	border: 1px solid #cccccc;
+	-webkit-border-radius: 4px;
+	margin-top: 10px;
+	padding: 5px;
+}
+
+/******************
+Name pile sort
+******************/		
+
+#nameScrollerWrapper {
+	position: fixed;
+	z-index: 1000;
+	height: 60px;
+	width: 100%;
+	background: #aaa;
+	overflow: auto;
+	top: 68px;
+	left: 0px;
+}
+
+#nameScroller {
+	width: 6040px;
+	float: left;
+	padding: 0;
+	height: 100%;
+}
+
+#nameScroller ul {
+	list-style: none;
+	display: block;
+	float: left;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}
+
+#nameScroller li {
+	display: block;
+	vertical-align: middle;
+	float: left;
+	padding: 0 10px;
+	width: 80px;
+	height: 100%;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #fff;
+	background-color: #fafafa;
+	font-size: 14px;
+}
+
+.addCard {
+	position: relative;
+}
+
+.namepsSVG {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 990;
+}
+
+.namecard {
+	background: #fff;
+}
+
+.modalSVG {
+	position: fixed;
+	top: 0px; left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 900;
+	/* background: #CCC; */
+	background-image: url('./img/p5.png');
+}
+
+.cardTrash {
+	font-size: 50px;
+	position: fixed;
+	bottom: 5px;
+	right: 5px;
+	z-index: 950;
+}
+
+/******************
+Name node link
+******************/	
+
+.touchQuestionPrompt {
+	position: fixed;
+	left: 0px;
+	top: 135px;
+	pointer-events: none;
+	z-index: 991;
+	display: none;
+	width: 250px;
+	padding-left: 10px;
+	background: rgba(255,255,255,0.3);
+	border-radius: 3px;
+	border-width: 10px;
+	border: black;
+	font-family: 'Arvo', serif;
+	font-size: 20px;
+	line-height: 23px;
+}
+
+.nodelinkSVG {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 990;
+}
+
+.link {
+	stroke: #AAA;
+	stroke-width: 3px;
+}
+
+.forceControls {
+	position: fixed;
+	z-index: 1000;
+	right: 0;
+	bottom: 0;
+}
+
+#nlToolBox {
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	right: 60px;
+}
+
+#nlToolBox .btn {
+	font-size: 20px;
+	padding: 10px;
+}
+
+.ndnm {
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.7);
+}
+
+/******************
+
+Basic Roster
+
+******************/	
+
+.basicRosterEntry {
+	padding-top: 20px;
+	padding-left: 20px;
+	color: black;
+}
+
+.basicRosterEntry h4 {
+	position: relative;
+	left: -20px;
+}
+
+.rosterEntryName:hover {
+	cursor: pointer; cursor: hand;
+}
+
+.basicRosterEntryButton {
+	width: 100%;
+}
+
+.accordionClickRoster {
+	color: rgb(153,153,153);
+}
+
+.rosterSentence {
+	position: relative;
+	top: -8px;
+	color: rgb(92, 92, 92);
+}
+
+/******************
+Affilliation Drop-Add
+******************/
+
+.aff-dropadd-pair {
+	list-style-type: none;
+	background: white;
+	border: 1px;
+	border-color: rgb(189, 189, 189);
+	border-style: solid;
+	border-radius: 7px;
+	padding-left: 10px;
+	margin-top: 3px;
+}
+
+.aff-dropadd-pair .nameedit {
+	display: none;
+}
+
+.mode-name {
+	margin-left: 14px;
+	cursor: pointer; cursor: hand;
+}
+
+.mode-connect {
+	margin-left: 14px;
+}
+
+.remove-pair {
+	cursor: pointer; cursor: hand;
+}
+
+.aff-dropadd-submitclear {
+	margin-top: 15px;
+}
+
+.aff-dropadd-list {
+	list-style-type: none;
+	width: 228px;
+	margin: 30px 0 0;
+	padding: 0;
+	background-color: #fff;
+	cursor: pointer; cursor: hand;
+	-webkit-border-radius: 6px;
+	  -moz-border-radius: 6px;
+		    border-radius: 6px;
+	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	  -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+		    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+
+.aff-dropadd-list input {
+	display: none;
+}
+
+.aff-dropadd-list > li > p {
+	display: block;
+	width: 190px \9;
+	margin: 0 0 -1px;
+	padding: 8px 14px;
+	border: 1px solid #e5e5e5;
+}
+.aff-dropadd-list > li:first-child > a {
+	-webkit-border-radius: 6px 6px 0 0;
+	  -moz-border-radius: 6px 6px 0 0;
+		    border-radius: 6px 6px 0 0;
+}
+.aff-dropadd-list > li:last-child > a {
+	-webkit-border-radius: 0 0 6px 6px;
+	  -moz-border-radius: 0 0 6px 6px;
+		    border-radius: 0 0 6px 6px;
+}
+.aff-dropadd-list .active {
+	background: rgb(182, 191, 228);
+}
+
+/*******************************************************************************
+
+  ADJUSTMENTS FOR TABLETS
+
+
+/******************************************************************************/
+
+/******************
+	Nexus 10 - portrait
+******************/
+
+
+@media screen and (max-width: 1024px) {
+	body {
+		font-size: 17px;
+		line-height: 25px;
+	}
+	
+	.navBarContainer {
+		width: 800px;
+	}
+	
+	.container {
+		width: 700px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.bottomNavBar {
+		display: none;
+	}
+	
+	.btn {
+		padding: 11px 17px;
+		font-size: 17.5px;
+	}
+	
+	.btn-group > .btn {
+		padding: 11px 17px;
+		font-size: 17.5px;
+	}
+	
+	.RFcontrol {
+		font-size: 30px;
+		right: 35px;
+	}
+	
+	.DKcontrol {
+		font-size: 30px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+<p><%- rc.timeago %> - <%- rc.surveystatus %> - <%- rc.lastgroup %> </p>
+<p>Started by <%- rc.user %> at <%- rc.datecreated %>
+<p><% if (rc.names.local) { %>
+	Names are local
+	<%= rc.names.dirty ? ', and dirty' : '' %>
+	<%= rc.names.destroyed ? ', and destroyed' : '' %>
+	<% } %></p>
+
+<p><% if (rc.responses.local) { %>
+	Responses are local
+	<%= rc.responses.dirty ? ', and dirty' : '' %>
+	<%= rc.responses.destroyed ? ', and destroyed' : '' %>
+	<% } %></p>
+	
+<button class = "btn loadRespondentSurvey" data-loading-text="Loading survey...">Load Survey</button>
+<div class = "progress syncResponseProgress">
+	<div class = "bar"></div>
+</div>
+<div class = "progress syncNameProgress">
+	<div class = "bar"></div>
+</div>
+<% if (rc.sync && app.appState.get('hostreachable')) { %><button class = "btn respondentSync">Sync now</button><% } %>
+<!-- button class = "btn viewLocal">View Local Data</button -->
